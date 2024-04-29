@@ -71,20 +71,16 @@ class Board {
           let d_aux = newPositions.z + d;
           let h_aux = newPositions.y + h;
           if ((w_aux > this.width || d_aux > this.deep || h_aux < 1) && shape[w][d][h] != 0){
-            console.log("first")
             //fuara de los limites, sin contar la ficha naciente
             return false;
           }
           //las partes de la ficha no toquen con otras
           else if (shape[w][d][h] != 0 && this.board3D[w_aux][d_aux][h_aux]!=0 && this.board3D[w_aux][d_aux][h_aux]!=undefined){
-            
-            console.log("second position:",this.board3D[w_aux][d_aux][h_aux])
             return false;
           }
         }
       }
     }
-    console.log("se puede mover")
     return true;
   }
   getDimentions() {

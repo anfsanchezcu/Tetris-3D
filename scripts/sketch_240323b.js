@@ -1,18 +1,21 @@
 let board;
 let token;
 let speed;
+let intervalId;
+let board_hight;
+
+
 function setup() {
   const canvas = createCanvas(500, 400, WEBGL);
   canvas.parent("canvas-container");
   canvas.addClass("");
   speed = 500;
-  board = new Board(7, 7, 10); //width, deep, hight
+  let board_width = 7;
+  let board_deep = 7;
+  board_hight = 10;
+  board = new Board(board_width, board_deep, board_hight); //width, deep, hight
   token = new Shape(board.getDimentions(), board.getScale());
   setupGame();
-
-  setTimeout(()=> board.drawTestFloor(4),2000)
-  setTimeout(()=> board.drawTestFloor(1),7000)
-  setTimeout(()=> board.drawTestFloor(5),5000)
 }
 
 function draw() {
@@ -27,7 +30,7 @@ function draw() {
 
 function drawAxes() {
   push();
-  translate(-width/1.1 , -height /2, 0 ); //ajuste para render al "centro"
+  translate(-width / 1.1, -height / 2, 0); //ajuste para render al "centro"
   strokeWeight(4);
   stroke(255, 0, 0);
   line(0, 0, 100, 0);
@@ -40,13 +43,14 @@ function drawAxes() {
   pop();
 }
 function setupGame() {
-  setInterval(() => {
+  intervalId = setInterval(() => {
     if (token.shape == undefined) token.generateRamdonShape();
     else startGame();
   }, speed);
 }
+
+//es await por que el checkpoint al eliminar una fila lo hace con un efecto bonito :3 
 async function startGame() {
-  
   const tokenPosition = token.getPosition();
   let nextPosition = {
     x: tokenPosition.x,
@@ -54,20 +58,24 @@ async function startGame() {
     z: tokenPosition.z,
   };
   let auxResult = board.checkCollision(token.shape, nextPosition);
-  if (auxResult == true) token.moveDown();
-  else if (auxResult == false) {
-    board.saveState(token.shape, tokenPosition);
-    addPoints(100);
-    token.reset();
-    let pointByLine = await board.checkPoints();
-    addPoints(pointByLine);
-    addCompletedLines(pointByLine/1000);
-  } else {
-    console.log("ERROR: ", auxResult);
+  if (auxResult) token.moveDown();
+  else {
+    if(isColumnFull()){
+      endGame();
+    }else{
+      board.saveState(token.shape, tokenPosition);
+      addPoints(100);
+      token.reset();
+      let pointByLine = await board.checkPoints();
+      addPoints(pointByLine);
+      addCompletedLines(pointByLine / 1000);
+    }
+   
   }
 }
 
 function keyPressed() {
+  /* ----------------------move arounde the table------------------------- */
   if (keyCode === RIGHT_ARROW) {
     const tokenPosition = token.getPosition();
     let nextPosition = {
@@ -108,13 +116,65 @@ function keyPressed() {
 
     if (board.checkCollision(token.shape, nextPosition)) token.moveFront();
   }
+  if (key === ' ') {
+    speed -= 150;
+    timeController(speed);
+  }
+
+
+  /* ----------------------move over it self------------------------- */
+  if (key === "w" || key === "s") {
+    aux_shape = token.rotateY();
+    if (board.checkCollision(aux_shape, token.getPosition()))
+      token.shape = aux_shape;
+    aux_shape = null;
+  }
+
+  if (key === "a" || key === "d") {
+    aux_shape = token.rotateZ();
+    if (board.checkCollision(aux_shape, token.getPosition()))
+      token.shape = aux_shape;
+    aux_shape = null;
+  }
 }
 
-function addPoints(points){
-  let scoreElement = document.getElementById('score');
-  scoreElement.textContent = ` ${int(scoreElement.textContent)+ points}`;
+
+function keyReleased() {
+  if (key === ' ') {
+    speed += 150;
+    timeController(speed);
+  }
 }
-function addCompletedLines(completeLines){
-  let lineElement = document.getElementById('lines');
-  lineElement.textContent = ` ${int(lineElement.textContent)+ completeLines}`;
+
+function addPoints(points) {
+  let scoreElement = document.getElementById("score");
+  scoreElement.textContent = ` ${int(scoreElement.textContent) + points}`;
 }
+function addCompletedLines(completeLines) {
+  let lineElement = document.getElementById("lines");
+  lineElement.textContent = ` ${int(lineElement.textContent) + completeLines}`;
+}
+function isColumnFull(){
+  const tokenPosition = token.getPosition();
+  let nextPosition = {
+    x: tokenPosition.x,
+    y: board_hight,
+    z: tokenPosition.z,
+  };
+  return !board.checkCollision(token.shape, nextPosition);
+}
+function endGame() {
+  
+  alert("Game Over");
+}
+
+function timeController(time){
+    clearInterval(intervalId);
+    intervalId = setInterval(() => {
+      if (token.shape == undefined) token.generateRamdonShape();
+      else startGame();
+    }, time);
+}
+
+
+

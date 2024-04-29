@@ -1,11 +1,12 @@
 class Shape {
   constructor(boardDimentions, scale) {
+    //this.shape
     this.width = boardDimentions.width;
     this.deep = boardDimentions.deep;
     this.hight = boardDimentions.hight;
     this.position = {
       x: this.width >= 8 ? int(this.width / 2) : 0,
-      y: this.hight +1,
+      y: this.hight + 1,
       z: int(this.width / 2),
     };
     this.scale = scale;
@@ -52,7 +53,7 @@ class Shape {
           for (let h = 0; h < 4; h++) {
             if (this.shape[w][d][h] != 0) {
               push();
-              translate(-width/10 , -height /2, -width/10 ); //ajuste para render al "centro"
+              translate(-width / 10, -height / 2, -width / 10); //ajuste para render al "centro"
               translate(
                 (this.position.x + w) * this.scale,
                 (this.position.y + h) * this.scale,
@@ -90,12 +91,44 @@ class Shape {
   reset() {
     this.position = {
       x: this.width >= 8 ? int(this.width / 2) : 0,
-      y: this.hight +1,
+      y: this.hight + 1,
       z: int(this.width / 2),
     };
     this.collition = false;
     this.color = "white";
     this.shape = undefined;
+  }
+  rotateY() {
+    if (this.shape) {
+      const real_shape = this.shape;
+      let aux_shape = new Array(4)
+        .fill()
+        .map(() => new Array(4).fill().map(() => new Array(4).fill(0)));
+      for (let w = 0; w < 4; w++) {
+        for (let d = 0; d < 4; d++) {
+          for (let h = 0; h < 4; h++) {
+            aux_shape[w][d][h] = real_shape[d][w][h];
+          }
+        }
+      }
+      return aux_shape;
+    }
+  }
+  rotateZ() {
+    if (this.shape) {
+      const real_shape = this.shape;
+      let aux_shape = new Array(4)
+        .fill()
+        .map(() => new Array(4).fill().map(() => new Array(4).fill(0)));
+      for (let w = 0; w < 4; w++) {
+        for (let d = 0; d < 4; d++) {
+          for (let h = 0; h < 4; h++) {
+            aux_shape[w][d][h] = real_shape[h][d][w];
+          }
+        }
+      }
+      return aux_shape;
+    }
   }
 
   shape_1() {
