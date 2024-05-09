@@ -71,6 +71,7 @@ async function startGame() {
       addCompletedLines(pointByLine / 1000);
     }
   }
+  
 }
 
 function keyPressed() {
