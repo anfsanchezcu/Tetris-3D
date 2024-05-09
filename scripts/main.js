@@ -19,3 +19,22 @@ document.getElementById("pause").addEventListener("click", function () {
     timeController(speed);
   }
 });
+
+
+
+let imageUrl = null;
+document.getElementById("container").addEventListener("",()=>{
+  if(imageUrl == null) {
+    console.log("imeage 1= null")
+    document.body.style.backgroundImage = imageUrl;
+  
+  
+    /* let container = document.getElementById("container");
+    img.backgroundImage = imageUrl;
+    document.body.appendChild(img); */
+  
+  }
+})
+
+
+

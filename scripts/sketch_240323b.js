@@ -4,7 +4,6 @@ let speed;
 let intervalId;
 let board_hight;
 
-
 function setup() {
   const canvas = createCanvas(500, 400, WEBGL);
   canvas.parent("canvas-container");
@@ -16,16 +15,17 @@ function setup() {
   board = new Board(board_width, board_deep, board_hight); //width, deep, hight
   token = new Shape(board.getDimentions(), board.getScale());
   setupGame();
+  setImageToInmersive();
 }
 
 function draw() {
   background(0);
   orbitControl();
-
   scale(0.5, -0.5, 0.5);
-  //drawAxes();
   token.draw();
   board.draw();
+  getImageToInmersive();
+
 }
 
 function drawAxes() {
@@ -49,7 +49,7 @@ function setupGame() {
   }, speed);
 }
 
-//es await por que el checkpoint al eliminar una fila lo hace con un efecto bonito :3 
+//es await por que el checkpoint al eliminar una fila lo hace con un efecto bonito :3
 async function startGame() {
   const tokenPosition = token.getPosition();
   let nextPosition = {
@@ -60,9 +60,9 @@ async function startGame() {
   let auxResult = board.checkCollision(token.shape, nextPosition);
   if (auxResult) token.moveDown();
   else {
-    if(isColumnFull()){
+    if (isColumnFull()) {
       endGame();
-    }else{
+    } else {
       board.saveState(token.shape, tokenPosition);
       addPoints(100);
       token.reset();
@@ -70,8 +70,8 @@ async function startGame() {
       addPoints(pointByLine);
       addCompletedLines(pointByLine / 1000);
     }
-   
   }
+  endGame();
 }
 
 function keyPressed() {
@@ -116,11 +116,10 @@ function keyPressed() {
 
     if (board.checkCollision(token.shape, nextPosition)) token.moveFront();
   }
-  if (key === ' ') {
+  if (key === " ") {
     speed -= 150;
     timeController(speed);
   }
-
 
   /* ----------------------move over it self------------------------- */
   if (key === "w" || key === "s") {
@@ -138,9 +137,8 @@ function keyPressed() {
   }
 }
 
-
 function keyReleased() {
-  if (key === ' ') {
+  if (key === " ") {
     speed += 150;
     timeController(speed);
   }
@@ -154,7 +152,7 @@ function addCompletedLines(completeLines) {
   let lineElement = document.getElementById("lines");
   lineElement.textContent = ` ${int(lineElement.textContent) + completeLines}`;
 }
-function isColumnFull(){
+function isColumnFull() {
   const tokenPosition = token.getPosition();
   let nextPosition = {
     x: tokenPosition.x,
@@ -164,17 +162,31 @@ function isColumnFull(){
   return !board.checkCollision(token.shape, nextPosition);
 }
 function endGame() {
-  
-  alert("Game Over");
+  let modal = document.getElementById("myModalGameOver");
+  modal.classList.remove("hidden");
+  clearInterval(intervalId);
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
 }
 
-function timeController(time){
-    clearInterval(intervalId);
-    intervalId = setInterval(() => {
-      if (token.shape == undefined) token.generateRamdonShape();
-      else startGame();
-    }, time);
+function timeController(time) {
+  clearInterval(intervalId);
+  intervalId = setInterval(() => {
+    if (token.shape == undefined) token.generateRamdonShape();
+    else startGame();
+  }, time);
 }
 
 
-
+function getImageToInmersive() {
+  imageUrl = canvas.toDataURL("image/png");
+}
+function setImageToInmersive() {
+  setInterval(function() {
+    let imgElement = document.getElementById('container');
+    imgElement.style.backgroundImage = `url("${imageUrl}")`;
+  }, 1);
+}

@@ -1,36 +1,145 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-</head>
+    <!-- PLEASE NO CHANGES BELOW THIS LINE (UNTIL I SAY SO) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- OK, YOU CAN MAKE CHANGES BELOW THIS LINE AGAIN -->
 
-<body >
-  <div class="min-h-[420] h-screen max-h-screen bg-black">
-    <div id="canvas-container" class="flex md:flex-col-reverse flex-col justify-center items-center">
-      <div class="min-h-max w-full  bg-slate-300">
-        <div class="flex justify-center items-center">
-      fi    <div class="flex flex-col justify-center items-center">
-            <h1 class="text-4xl text-white">Tetris</h1>
-            <p class="text-white">Score: <span id="score">0</span></p>
-          </div>
+  </head>
+
+  <body>
+    <div
+      class="min-h-[420] h-full  bg-black bg-[url('../assets/img/bg-menu.jpg')] bg-no-repeat bg-cover">
+
+      <div class="min-h-screen w-full flex justify-center items-center">
+
+        <div class="flex flex-col justify-center items-center md:gap-5 gap-2">
+          <h1 class="text-4xl text-white" title-tetris>
+            <img src="assets/img/Title.png" alt="title-tetris"
+              class="md:w-full w-[200px] title-tetris">
+          </h1>
+          <p class="text-white">Score: <span id="score">0</span></p>
+          <a href="pages/tetris.html">
+            <button id="start"
+              class="min-w-[120px] hover:scale-[1.05] easy-out duration-300 font-bold border-2 border-[#AC42BF] text-white p-2 rounded-md">Jugar</button>
+          </a>
+
+          <button id="openModal"
+            class="min-w-[120px] hover:scale-[1.05] easy-out duration-300 font-bold border-2 border-[#AC42BF] text-white p-2 rounded-md">Instrucciones</button>
         </div>
+
         <div class="flex justify-center items-center">
-          <div class="flex flex-col justify-center items-center">
-            <a href="pages/tetris.html">
-              <button id="start" class="bg-slate-500 text-white p-2 rounded-md">Start</button>
-            </a>
-            <button id="pause" class="bg-slate-500 text-white p-2 rounded-md">Pause</button>
-            <button id="reset" class="bg-slate-500 text-white p-2 rounded-md">Reset</button>
+        </div>
+
+      </div>
+
+      <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden"
+        aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div
+          class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          <div class="fixed bg-black inset-0 bg-opacity-75 transition-opacity "
+            aria-hidden="true"></div>
+
+          <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true">&#8203;</span>
+
+          <div
+            class="inline-block align-bottom border-sky-600 border bg-black/30 backdrop-blur  rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class=" px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div
+                class="w-full h-full  ">
+                <aside
+                  class="h-full mx-auto flex flex-col gap-5 justify-center">
+                  <div class="flex flex-col justify-center items-center p-5">
+                    <h1
+                      class="text-4xl text-white font-bold pb-5">Instrucciones</h1>
+                    <article class="w-full">
+                      <aside class="mx-auto flex flex-row gap-5 justify-center">
+                        <div class="flex flex-col justify-center gap-2">
+                          <p class="text-white pb-2">Utilice la tecla espacio
+                            para aumentar la velocidad del juego </p>
+                          <div
+                            class="justify-center items-center gap-5 flex flex-row">
+                            <div
+                              class="boder-white border  px-3 py-2 rounded-lg text-white md:min-w-[200px] min-w-[100px]">__</div>
+                          </div>
+
+                        </div>
+                      </aside>
+                    </article>
+                  </div>
+                </aside>
+                <!------------- key arrows----- -->
+                <div id="main-article" class="flex flex-row  gap-5">
+                  <article class="w-full">
+                    <aside class="mx-auto flex flex-row gap-5 justify-center">
+                      <div class="flex flex-col justify-center gap-2">
+                        <p class="text-white pb-2">Utilice las siguientes teclas
+                          para girar las fichas </p>
+                        <div
+                          class="justify-center items-center gap-5 flex flex-row">
+                          <div
+                            class="boder-white border  px-3 py-2 rounded-lg text-white min-w-[40px]">W</div>
+                        </div>
+                        <div
+                          class="justify-center items-center gap-5 flex flex-row">
+                          <div
+                            class="boder-white border  px-3 py-2 rounded-lg text-white min-w-[40px]">A</div>
+                          <div
+                            class="boder-white border  px-3 py-2 rounded-lg text-white min-w-[40px]">S</div>
+                          <div
+                            class="boder-white border  px-3 py-2 rounded-lg text-white min-w-[40px]">D</div>
+                        </div>
+
+                      </div>
+                    </aside>
+                  </article>
+                  <article class="w-full">
+                    <aside class="mx-auto flex flex-row gap-5 justify-center">
+                      <div class="flex flex-col justify-center">
+                        <p class="text-white pb-2">Utilice las siguientes teclas
+                          para desplazar las fichas a traves del tablero</p>
+                        <div
+                          class="justify-center items-center gap-5 flex flex-row">
+                          <img class="w-[40px]"
+                            src="../assets/icons/upArrow.png"
+                            alt="upArrow">
+                        </div>
+                        <div
+                          class="justify-center items-center gap-5 flex flex-row">
+                          <img class="w-[40px]"
+                            src="../assets/icons/leftArrow.png"
+                            alt="leftArrow">
+                          <img class="w-[40px]"
+                            src="../assets/icons/downArrow.png"
+                            alt="downArrow">
+                          <img class="w-[40px]"
+                            src="../assets/icons/rightArrow.png"
+                            alt="rightArrow">
+                        </div>
+
+                      </div>
+                    </aside>
+                  </article>
+
+                </div>
+              </div>
+            </div>
+            <div
+              class="px-4 py-3 sm:px-6 sm:flex sm:flex-row border-sky-600 border-t  backdrop-blur bg-[url('../assets/img/bg-instructions.jpg')] bg-no-repeat bg-cover bg-top backdrop-blur">
+              <button id="closeModal" type="button"
+                class="mt-3 inline-flex justify-center rounded-md border-red-700 font-bold color-red-700  border shadow-sm px-4 py-2 bg-transparent text-base font-medium text-white hover:bg-red-700  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 w-auto sm:text-sm">
+                X
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  </body>
-</html>
+
+      <script language="javascript" type="text/javascript"
+        src="../scripts/main.js"></script>
+    </body>
+  </html>
