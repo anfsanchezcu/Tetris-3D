@@ -25,7 +25,6 @@ function draw() {
   token.draw();
   board.draw();
   getImageToInmersive();
-
 }
 
 function drawAxes() {
@@ -63,6 +62,7 @@ async function startGame() {
     if (isColumnFull()) {
       endGame();
     } else {
+      console.log("stop moving")
       board.saveState(token.shape, tokenPosition);
       addPoints(100);
       token.reset();
@@ -71,7 +71,6 @@ async function startGame() {
       addCompletedLines(pointByLine / 1000);
     }
   }
-  
 }
 
 function keyPressed() {
@@ -122,15 +121,35 @@ function keyPressed() {
   }
 
   /* ----------------------move over it self------------------------- */
-  if (key === "w" || key === "s") {
-    aux_shape = token.rotateY();
+
+  if (key === "a") {
+    aux_shape = token.rotateY("left");
     if (board.checkCollision(aux_shape, token.getPosition()))
       token.shape = aux_shape;
     aux_shape = null;
   }
+  if (key === "d") {
+    aux_shape = token.rotateY("right");
+    if (board.checkCollision(aux_shape, token.getPosition())) 
+      token.shape = aux_shape;
+    
+    aux_shape = null;
+  }
 
-  if (key === "a" || key === "d") {
-    aux_shape = token.rotateZ();
+  if (key === "w" ) {
+    aux_shape = token.rotateX("up");
+    if (board.checkCollision(aux_shape, token.getPosition()))
+      token.shape = aux_shape;
+    aux_shape = null;
+  }
+  if ( key === "s") {
+    aux_shape = token.rotateX("down");
+    if (board.checkCollision(aux_shape, token.getPosition()))
+      token.shape = aux_shape;
+    aux_shape = null;
+  }
+  if ( key === "z") {
+    aux_shape = token.rotateZ("down");
     if (board.checkCollision(aux_shape, token.getPosition()))
       token.shape = aux_shape;
     aux_shape = null;
@@ -139,7 +158,7 @@ function keyPressed() {
 
 function keyReleased() {
   if (key === " ") {
-    speed += 150;
+    speed -= 50;
     timeController(speed);
   }
 }
@@ -165,11 +184,11 @@ function endGame() {
   let modal = document.getElementById("myModalGameOver");
   modal.classList.remove("hidden");
   clearInterval(intervalId);
-  window.onclick = function(event) {
+  window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
-  }
+  };
 }
 
 function timeController(time) {
@@ -180,13 +199,12 @@ function timeController(time) {
   }, time);
 }
 
-
 function getImageToInmersive() {
   imageUrl = canvas.toDataURL("image/png");
 }
 function setImageToInmersive() {
-  setInterval(function() {
-    let imgElement = document.getElementById('container');
+  setInterval(function () {
+    let imgElement = document.getElementById("container");
     imgElement.style.backgroundImage = `url("${imageUrl}")`;
   }, 1);
 }
