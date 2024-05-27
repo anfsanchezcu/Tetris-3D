@@ -62,7 +62,6 @@ async function startGame() {
     if (isColumnFull()) {
       endGame();
     } else {
-      console.log("stop moving")
       board.saveState(token.shape, tokenPosition);
       addPoints(100);
       token.reset();

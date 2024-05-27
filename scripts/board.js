@@ -72,19 +72,16 @@ class Board {
           let h_aux = newPositions.y + h;
           if ((w_aux > this.width || d_aux > this.deep || h_aux < 1) && shape[w][d][h] != 0){
             //fuara de los limites, sin contar la ficha naciente
-            console.log('condition 1')
             return false;
           }
           //las partes de la ficha no toquen con otras 
           else if (shape[w][d][h] != 0 && this.board3D[w_aux][d_aux][h_aux]!=0 && this.board3D[w_aux][d_aux][h_aux]!=undefined){
-            console.log('condition 2')
             return false;
           }
           
         }
       }
     }
-    console.log("is moving")
     return true;
   }
   getDimentions() {
@@ -135,7 +132,6 @@ class Board {
   }
 
   drawTestFloor(h) {
-    console.log("creating");
     for (let w = this.width - 1; w >= 0; w--) {
       for (let d = this.deep - 1; d >= 0; d--) {
         this.board3D[w][d][h] = 3;
